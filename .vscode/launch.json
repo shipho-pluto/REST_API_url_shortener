@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "URL Shotener",
+            "name": "URL Shortener",
             "type": "go",
             "request": "launch",
-            "program": "${workspaceFolder}/cmd/main.go",
+            "program": "${workspaceFolder}/cmd/url_shortener/main.go",
             "envFile": "${workspaceFolder}/.env"
         }
     ]
