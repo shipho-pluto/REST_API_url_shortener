@@ -1,4 +1,4 @@
-package get
+package redirect
 
 import (
 	"log/slog"

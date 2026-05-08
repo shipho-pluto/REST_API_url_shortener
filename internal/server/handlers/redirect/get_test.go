@@ -1,4 +1,4 @@
-package get
+package redirect
 
 import (
 	"errors"
@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestSaveHandler(t *testing.T) {
+func TestGetHandler(t *testing.T) {
 	cases := []struct {
 		name      string
 		alias     string
