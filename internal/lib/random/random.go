@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func NewRandiomString(length int) string {
+func NewRandomString(length int) string {
 	res := strings.Builder{}
 
 	chars := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +

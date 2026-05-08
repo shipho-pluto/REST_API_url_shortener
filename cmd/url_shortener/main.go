@@ -7,8 +7,8 @@ import (
 	"url-shotener/internal/config"
 	"url-shotener/internal/lib/logger/setup"
 	"url-shotener/internal/lib/logger/sl"
+	redirect "url-shotener/internal/server/handlers/redirect"
 	"url-shotener/internal/server/handlers/url/delete"
-	"url-shotener/internal/server/handlers/url/get"
 	"url-shotener/internal/server/handlers/url/save"
 	"url-shotener/internal/server/middleware/logger"
 	"url-shotener/internal/storage/postgres"
@@ -51,7 +51,7 @@ func main() {
 		r.Delete("/{alias}", delete.New(log, storage))
 	})
 
-	router.Get("/{alias}", get.New(log, storage))
+	router.Get("/{alias}", redirect.New(log, storage))
 
 	log.Info("starting url-shotener server", slog.String("address", cfg.Server.Address))
 

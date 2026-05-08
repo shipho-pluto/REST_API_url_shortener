@@ -50,7 +50,7 @@ func New(log *slog.Logger, urlSaver URLSaver) http.HandlerFunc {
 
 		alias := req.Alias
 		if alias == "" {
-			alias = random.NewRandiomString(aliasLength)
+			alias = random.NewRandomString(aliasLength)
 		}
 
 		log.Info("successfully validated request")
