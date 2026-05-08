@@ -3,9 +3,9 @@ package save
 import (
 	"log/slog"
 	"net/http"
-	resp "url-shotener/internal/lib/api/response"
-	"url-shotener/internal/lib/logger/sl"
-	"url-shotener/internal/lib/random"
+	resp "url-shortener/internal/lib/api/response"
+	"url-shortener/internal/lib/logger/sl"
+	"url-shortener/internal/lib/random"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"

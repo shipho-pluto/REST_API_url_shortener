@@ -4,9 +4,9 @@ import (
 	"errors"
 	"net/http/httptest"
 	"testing"
-	"url-shotener/internal/lib/api"
-	"url-shotener/internal/lib/logger/emptylog"
-	"url-shotener/internal/server/handlers/redirect/mocks"
+	"url-shortener/internal/lib/api"
+	"url-shortener/internal/lib/logger/emptylog"
+	"url-shortener/internal/server/handlers/redirect/mocks"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/assert"

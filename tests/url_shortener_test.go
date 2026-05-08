@@ -9,9 +9,9 @@ import (
 	"github.com/gavv/httpexpect/v2"
 	"github.com/stretchr/testify/require"
 
-	"url-shotener/internal/lib/api"
-	"url-shotener/internal/lib/random"
-	"url-shotener/internal/server/handlers/url/save"
+	"url-shortener/internal/lib/api"
+	"url-shortener/internal/lib/random"
+	"url-shortener/internal/server/handlers/url/save"
 )
 
 const (

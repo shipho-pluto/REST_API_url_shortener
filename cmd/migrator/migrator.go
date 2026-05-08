@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log/slog"
-	"url-shotener/internal/config"
-	"url-shotener/internal/lib/logger/setup"
-	"url-shotener/internal/lib/logger/sl"
+	"url-shortener/internal/config"
+	"url-shortener/internal/lib/logger/setup"
+	"url-shortener/internal/lib/logger/sl"
 
 	"errors"
 	"flag"

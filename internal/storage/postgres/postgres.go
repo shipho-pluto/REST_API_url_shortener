@@ -3,8 +3,8 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
-	"url-shotener/internal/config"
-	req "url-shotener/internal/storage/postgres/requests"
+	"url-shortener/internal/config"
+	req "url-shortener/internal/storage/postgres/requests"
 
 	_ "github.com/lib/pq"
 )

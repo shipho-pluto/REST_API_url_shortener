@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"url-shotener/internal/lib/logger/emptylog"
-	"url-shotener/internal/server/handlers/url/save/mocks"
+	"url-shortener/internal/lib/logger/emptylog"
+	"url-shortener/internal/server/handlers/url/save/mocks"
 
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
