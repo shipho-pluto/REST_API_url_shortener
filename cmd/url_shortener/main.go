@@ -12,6 +12,7 @@ import (
 	"url-shortener/internal/server/handlers/url/save"
 	"url-shortener/internal/server/middleware/logger"
 	"url-shortener/internal/storage/postgres"
+	"url-shortener/internal/storage/redis"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
@@ -31,7 +32,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	_ = storage
+	cache, err := redis.New(&cfg.Cache)
+	if err != nil {
+		log.Error("Cannot open cache", sl.Err(err))
+		os.Exit(1)
+	}
 
 	// Can do with base router net/http
 	router := chi.NewRouter()
@@ -51,7 +56,7 @@ func main() {
 		r.Delete("/{alias}", delete.New(log, storage))
 	})
 
-	router.Get("/{alias}", redirect.New(log, storage))
+	router.Get("/{alias}", redirect.New(log, storage, cache))
 
 	log.Info("starting url-shotener server", slog.String("address", cfg.Server.Address))
 

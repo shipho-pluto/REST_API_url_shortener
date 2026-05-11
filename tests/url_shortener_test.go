@@ -94,8 +94,8 @@ func TestURLShortener_SaveRedirect(t *testing.T) {
 
 			alias := tc.alias
 
-			if tc.alias != "" {
-				resp.Value("alias").String().IsEqual(tc.alias)
+			if alias != "" {
+				resp.Value("alias").String().IsEqual(alias)
 			} else {
 				resp.Value("alias").String().NotEmpty()
 

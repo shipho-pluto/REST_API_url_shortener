@@ -13,12 +13,11 @@ type Storage struct {
 	db *sql.DB
 }
 
-var info = "host=%s port=%s user=%s password=%s dbname=%s sslmode=%s"
-
 func New(storage *config.Storage) (*Storage, error) {
 	const op = "storage.postgres.Init"
 
-	var pgInfo = fmt.Sprintf(info, storage.Host, storage.Port, storage.User, storage.Password, storage.DBName, storage.SSLMode)
+	var pgInfo = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		storage.Host, storage.Port, storage.User, storage.Password, storage.DBName, storage.SSLMode)
 
 	db, err := sql.Open("postgres", pgInfo)
 	if err != nil {
@@ -28,35 +27,6 @@ func New(storage *config.Storage) (*Storage, error) {
 	if err := db.Ping(); err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
-
-	//TODO: rewrite to migrator
-
-	// stmt, err := db.Prepare(`
-	// CREATE TABLE IF NOT EXISTS url (
-	// 	id SERIAL PRIMARY KEY,
-	// 	alias TEXT UNIQUE,
-	// 	url TEXT);
-	// `)
-
-	// if err != nil {
-	// 	return nil, fmt.Errorf("%s: %w", op, err)
-	// }
-
-	// if _, err = stmt.Exec(); err != nil {
-	// 	return nil, fmt.Errorf("%s: %w", op, err)
-	// }
-
-	// stmt, err = db.Prepare(`
-	// CREATE INDEX IF NOT EXISTS idx_alias ON url (alias);
-	// `)
-
-	// if err != nil {
-	// 	return nil, fmt.Errorf("%s: %w", op, err)
-	// }
-
-	// if _, err = stmt.Exec(); err != nil {
-	// 	return nil, fmt.Errorf("%s: %w", op, err)
-	// }
 
 	return &Storage{db: db}, nil
 }

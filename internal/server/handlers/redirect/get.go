@@ -16,7 +16,13 @@ type URLProvider interface {
 	GetURL(alias string) (string, error)
 }
 
-func New(log *slog.Logger, urlProvider URLProvider) http.HandlerFunc {
+//go:generate go run github.com/vektra/mockery/@latest --name=URLChacher
+type URLCacher interface {
+	CacheURL(urlToSave string, alias string) error
+	GetURL(alias string) (string, error)
+}
+
+func New(log *slog.Logger, urlProvider URLProvider, urlCacher URLCacher) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "Handlers.URL.Get"
 
@@ -32,15 +38,34 @@ func New(log *slog.Logger, urlProvider URLProvider) http.HandlerFunc {
 			render.JSON(w, r, resp.Error(msg))
 			return
 		}
-
 		log.Info("successfully got alias", slog.Any("alias", alias))
 
-		url, err := urlProvider.GetURL(alias)
-		if msg := "failed to complite request"; err != nil {
+		url, err := urlCacher.GetURL(alias)
+		if msg := "failed with getiing from cache"; err != nil {
 			log.Error(msg, sl.Err(err))
 
 			render.JSON(w, r, resp.Error(msg))
 			return
+		}
+		if url != "" {
+			log.Info("successfully completed request from cache")
+
+			http.Redirect(w, r, url, http.StatusFound)
+			return
+		}
+
+		url, err = urlProvider.GetURL(alias)
+		if msg := "failed to complete request"; err != nil {
+			log.Error(msg, sl.Err(err))
+
+			render.JSON(w, r, resp.Error(msg))
+			return
+		}
+		log.Info("successfully got URL from provider")
+
+		err = urlCacher.CacheURL(url, alias)
+		if err != nil {
+			log.Error("failed with setting to cache", sl.Err(err))
 		}
 		log.Info("successfully complited request")
 

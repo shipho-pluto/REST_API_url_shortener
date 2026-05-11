@@ -12,7 +12,17 @@ import (
 type Config struct {
 	Env     string  `yaml:"env" env:"ENV" env-default:"local"`
 	Storage Storage `yaml:"storage" env:"STORAGE"`
+	Cache   Cache   `yaml:"cache" env:"CACHE"`
 	Server  Server  `yaml:"http_server" env:"HTTP_SERVER"`
+}
+
+type Cache struct {
+	Addr        string        `yaml:"addr"`
+	Password    string        `yaml:"password"`
+	DB          int           `yaml:"db"`
+	MaxRetries  int           `yaml:"max_retries"`
+	DialTimeout time.Duration `yaml:"dial_timeout"`
+	Timeout     time.Duration `yaml:"timeout" env:"TIMEOUT"`
 }
 
 type Storage struct {
