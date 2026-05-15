@@ -13,7 +13,7 @@ type Storage struct {
 	db *sql.DB
 }
 
-func New(storage *config.Storage) (*Storage, error) {
+func New(storage config.Storage) (*Storage, error) {
 	const op = "storage.postgres.Init"
 
 	var pgInfo = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",

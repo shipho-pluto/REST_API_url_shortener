@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"errors"
 	"fmt"
 	"time"
 	"url-shortener/internal/config"
@@ -14,7 +15,7 @@ type Cache struct {
 
 var expirationTime = time.Minute
 
-func New(cfg *config.Cache) (*Cache, error) {
+func New(cfg config.Cache) (*Cache, error) {
 	const op = "storage.redis.Init"
 
 	cl := redis.NewClient(&redis.Options{
@@ -53,10 +54,10 @@ func (r *Cache) GetURL(alias string) (string, error) {
 	var url string
 
 	err := r.cl.Get(alias).Scan(&url)
-	if err == redis.Nil {
-		return "", nil
-	}
 	if err != nil {
+		if errors.Is(err, redis.Nil) {
+			return "", redis.Nil
+		}
 		return "", fmt.Errorf("%s: %w", op, err)
 	}
 

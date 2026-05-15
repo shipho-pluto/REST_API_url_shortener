@@ -45,7 +45,6 @@ func TestGetHandler(t *testing.T) {
 			t.Parallel()
 
 			urlProviderMock := mocks.NewURLProvider(t)
-			urlCacherMock := mocks.NewURLCacher(t)
 
 			if tc.respError == "" || tc.mockError != nil {
 				urlProviderMock.On("ProvideURL", tc.alias).
@@ -53,7 +52,7 @@ func TestGetHandler(t *testing.T) {
 			}
 
 			r := chi.NewRouter()
-			r.Get("/{alias}", New(emptylog.NewEmptyLogger(), urlProviderMock, urlCacherMock))
+			r.Get("/{alias}", New(emptylog.NewEmptyLogger(), urlProviderMock))
 
 			ts := httptest.NewServer(r)
 			defer ts.Close()

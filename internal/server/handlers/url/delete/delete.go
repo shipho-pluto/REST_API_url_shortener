@@ -3,6 +3,7 @@ package delete
 import (
 	"log/slog"
 	"net/http"
+	"url-shortener/internal/clients"
 	resp "url-shortener/internal/lib/api/response"
 	"url-shortener/internal/lib/logger/sl"
 
@@ -17,7 +18,7 @@ type URLTrasher interface {
 	DeleteURL(alias string) error
 }
 
-func New(log *slog.Logger, urlTrasher URLTrasher) http.HandlerFunc {
+func New(log *slog.Logger, cls clients.Clients, urlTrasher URLTrasher) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "Handlers.URL.Delete"
 

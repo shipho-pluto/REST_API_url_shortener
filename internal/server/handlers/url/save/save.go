@@ -3,6 +3,7 @@ package save
 import (
 	"log/slog"
 	"net/http"
+	"url-shortener/internal/clients"
 	resp "url-shortener/internal/lib/api/response"
 	"url-shortener/internal/lib/logger/sl"
 	"url-shortener/internal/lib/random"
@@ -28,7 +29,7 @@ type URLSaver interface {
 	SaveURL(urlToSave string, alias string) error
 }
 
-func New(log *slog.Logger, urlSaver URLSaver) http.HandlerFunc {
+func New(log *slog.Logger, cls clients.Clients, urlSaver URLSaver) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "Handlers.URL.Save"
 

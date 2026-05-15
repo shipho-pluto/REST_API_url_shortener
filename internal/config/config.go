@@ -10,10 +10,16 @@ import (
 )
 
 type Config struct {
-	Env     string  `yaml:"env" env:"ENV" env-default:"local"`
+	Env       string        `yaml:"env" env:"ENV" env-default:"local"`
+	DataStore DataStore     `yaml:"datastore"`
+	Server    Server        `yaml:"http_server" env:"HTTP_SERVER"`
+	Clients   ClientsConfig `yaml:"clients"`
+	AppSecret string        `yaml:"app_secret" env:"APP_SECRET"`
+}
+
+type DataStore struct {
 	Storage Storage `yaml:"storage" env:"STORAGE"`
 	Cache   Cache   `yaml:"cache" env:"CACHE"`
-	Server  Server  `yaml:"http_server" env:"HTTP_SERVER"`
 }
 
 type Cache struct {
@@ -42,7 +48,17 @@ type Server struct {
 	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
 }
 
-func Mustload() *Config {
+type Client struct {
+	Address      string        `yaml:"address"`
+	Timeout      time.Duration `yaml:"timeout"`
+	RetriesCount int           `yaml:"retries_count"`
+}
+
+type ClientsConfig struct {
+	SSO Client `yaml:"sso"`
+}
+
+func MustLoad() *Config {
 	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
 		log.Fatal("CONFIG_PATH environment is not set")

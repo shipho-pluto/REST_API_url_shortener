@@ -1,9 +1,12 @@
 package main
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
 	"os"
+	"url-shortener/internal/clients"
+	ssogrpc "url-shortener/internal/clients/sso/grpc"
 	"url-shortener/internal/config"
 	"url-shortener/internal/lib/logger/setup"
 	"url-shortener/internal/lib/logger/sl"
@@ -11,30 +14,36 @@ import (
 	"url-shortener/internal/server/handlers/url/delete"
 	"url-shortener/internal/server/handlers/url/save"
 	"url-shortener/internal/server/middleware/logger"
-	"url-shortener/internal/storage/postgres"
-	"url-shortener/internal/storage/redis"
+	"url-shortener/internal/storage"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 )
 
 func main() {
-	cfg := config.Mustload()
+	cfg := config.MustLoad()
 
 	log := setup.SetupLogger(cfg.Env)
 
 	log.Info("starting url-shotener service", slog.String("env", cfg.Env))
 	log.Debug("debug message are enabled")
 
-	storage, err := postgres.New(&cfg.Storage)
+	ssoClient, err := ssogrpc.New(
+		context.Background(),
+		log,
+		cfg.Clients.SSO.Address,
+		cfg.Clients.SSO.Timeout,
+		cfg.Clients.SSO.RetriesCount,
+	)
 	if err != nil {
-		log.Error("Cannot open storage", sl.Err(err))
+		log.Error("Cannot connect to sso with grpc", sl.Err(err))
 		os.Exit(1)
 	}
+	cls := clients.New(ssoClient)
 
-	cache, err := redis.New(&cfg.Cache)
+	dataStorage, err := storage.New(cfg.DataStore)
 	if err != nil {
-		log.Error("Cannot open cache", sl.Err(err))
+		log.Error("Cannot open storage", sl.Err(err))
 		os.Exit(1)
 	}
 
@@ -47,16 +56,12 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
 
-	router.Route("/url", func(r chi.Router) {
-		r.Use(middleware.BasicAuth("url-shortener", map[string]string{
-			cfg.Server.User: cfg.Server.Password,
-		}))
+	{
+		router.Post("/", save.New(log, cls, dataStorage))
+		router.Delete("/{alias}", delete.New(log, cls, dataStorage))
+	}
 
-		r.Post("/", save.New(log, storage))
-		r.Delete("/{alias}", delete.New(log, storage))
-	})
-
-	router.Get("/{alias}", redirect.New(log, storage, cache))
+	router.Get("/{alias}", redirect.New(log, dataStorage))
 
 	log.Info("starting url-shotener server", slog.String("address", cfg.Server.Address))
 

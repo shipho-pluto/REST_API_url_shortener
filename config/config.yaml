@@ -1,21 +1,27 @@
 env: "local"
-storage:
-  host: "localhost"
-  port: "5432"
-  user: "postgres"
-  password: "postgres"
-  dbname: "postgres"
-  sslmode: "disable"
+datastore:
+  storage:
+    host: "localhost"
+    port: "5432"
+    user: "postgres"
+    password: "postgres"
+    dbname: "postgres"
+    sslmode: "disable"
+  cache:
+    addr: "localhost:6379"
+    password: ""
+    db: 0
+    max_retries: 3
+    dial_timeout: 10s
+    timeout: 5s
+clients:
+  sso:
+    address: "localhost:8081"
+    timeout: 1h
+    retries_count: 5
 http_server:
   user: "user"
   password: "pass"
   address: "localhost:8082"
   timeout: 4s
   idle_timeout: 60s
-cache:
-  addr: "localhost:6379"
-  password: ""
-  db: 0
-  max_retries: 3
-  dial_timeout: 10s
-  timeout: 5s
