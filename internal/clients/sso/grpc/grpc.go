@@ -16,8 +16,8 @@ import (
 )
 
 type Client struct {
-	api ssov1.AuthClient
-	log *slog.Logger
+	api   ssov1.AuthClient
+	AppID int32
 }
 
 func New(
@@ -26,6 +26,7 @@ func New(
 	addr string,
 	timeout time.Duration,
 	retriesCount int,
+	appID int32,
 ) (*Client, error) {
 	const op = "grpc.New"
 
@@ -52,8 +53,8 @@ func New(
 	}
 
 	return &Client{
-		api: ssov1.NewAuthClient(cc),
-		log: log,
+		api:   ssov1.NewAuthClient(cc),
+		AppID: appID,
 	}, nil
 }
 

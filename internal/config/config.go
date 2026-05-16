@@ -52,8 +52,18 @@ type Client struct {
 	AppID        int32         `yaml:"app_id"`
 }
 
+type Broker struct {
+	Address      string `yaml:"address"`
+	TopicName    string `yaml:"topic"`
+	Network      string `yaml:"network"`
+	Partitions   int    `yaml:"partitions"`
+	Replications int    `yaml:"replications"`
+	GroupID      string `yaml:"group_id"`
+}
+
 type ClientsConfig struct {
-	SSO Client `yaml:"sso"`
+	SSO    Client `yaml:"sso"`
+	Broker Broker `yaml:"kafka"`
 }
 
 func MustLoad() *Config {

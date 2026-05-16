@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"url-shortener/internal/clients"
+	"url-shortener/internal/clients/kafka"
 	ssogrpc "url-shortener/internal/clients/sso/grpc"
 	"url-shortener/internal/config"
 	"url-shortener/internal/lib/logger/setup"
@@ -39,12 +40,20 @@ func main() {
 		cfg.Clients.SSO.Address,
 		cfg.Clients.SSO.Timeout,
 		cfg.Clients.SSO.RetriesCount,
+		cfg.Clients.SSO.AppID,
 	)
 	if err != nil {
 		log.Error("Cannot connect to sso with grpc", sl.Err(err))
 		os.Exit(1)
 	}
-	cls := clients.New(ssoClient, cfg.Clients.SSO.AppID)
+
+	broker, err := kafka.New(log, cfg.Clients.Broker)
+	if err != nil {
+		log.Error("Cannot connect to kafka", sl.Err(err))
+		os.Exit(1)
+	}
+
+	cls := clients.New(ssoClient, broker)
 
 	dataStorage, err := storage.New(cfg.DataStore)
 	if err != nil {
@@ -79,6 +88,9 @@ func main() {
 
 	if err := srv.ListenAndServe(); err != nil {
 		log.Error("failed with start server")
+		if err := cls.Stop(); err != nil {
+			log.Error("failed with stop kafka")
+		}
 	}
 
 	log.Error("server stopped")

@@ -1,16 +1,21 @@
 package clients
 
-import ssogrpc "url-shortener/internal/clients/sso/grpc"
+import (
+	"url-shortener/internal/clients/kafka"
+	ssogrpc "url-shortener/internal/clients/sso/grpc"
+)
 
 type Clients struct {
 	*ssogrpc.Client
+	*kafka.Broker
 	appID int32
 }
 
-func New(sso *ssogrpc.Client, appID int32) Clients {
+func New(sso *ssogrpc.Client, kafka *kafka.Broker) Clients {
 	return Clients{
 		Client: sso,
-		appID:  appID,
+		Broker: kafka,
+		appID:  sso.AppID,
 	}
 }
 
