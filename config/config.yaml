@@ -19,9 +19,8 @@ clients:
     address: "localhost:8081"
     timeout: 1h
     retries_count: 5
+    app_id: 1
 http_server:
-  user: "user"
-  password: "pass"
   address: "localhost:8082"
   timeout: 4s
   idle_timeout: 60s

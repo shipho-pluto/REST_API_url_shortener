@@ -3,12 +3,11 @@ package save
 import (
 	"log/slog"
 	"net/http"
-	"url-shortener/internal/clients"
 	resp "url-shortener/internal/lib/api/response"
 	"url-shortener/internal/lib/logger/sl"
 	"url-shortener/internal/lib/random"
 
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 )
 
@@ -19,7 +18,7 @@ type Request struct {
 
 type Response struct {
 	resp.Response
-	Alias string `json:"alias,omitempty"`
+	Alias string `json:"alias"`
 }
 
 const aliasLength = 6
@@ -29,7 +28,7 @@ type URLSaver interface {
 	SaveURL(urlToSave string, alias string) error
 }
 
-func New(log *slog.Logger, cls clients.Clients, urlSaver URLSaver) http.HandlerFunc {
+func New(log *slog.Logger, urlSaver URLSaver) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "Handlers.URL.Save"
 

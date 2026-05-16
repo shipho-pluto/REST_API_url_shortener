@@ -63,11 +63,11 @@ func (ds *DataStore) DeleteURL(alias string) error {
 	return ds.pgDB.DeleteURL(alias)
 }
 
+func pgAddr(cfg config.Storage) string {
+	return cfg.Host + ":" + cfg.Port
+}
+
 var (
 	ErrURLNotFound = errors.New("url not found")
 	ErrURLExists   = errors.New("url exists")
 )
-
-func pgAddr(cfg config.Storage) string {
-	return cfg.Host + ":" + cfg.Port
-}

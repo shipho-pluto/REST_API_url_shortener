@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"url-shortener/internal/clients"
 	"url-shortener/internal/lib/logger/emptylog"
 	"url-shortener/internal/server/handlers/url/save/mocks"
 
@@ -60,14 +59,13 @@ func TestSaveHandler(t *testing.T) {
 			t.Parallel()
 
 			urlSaveMock := mocks.NewURLSaver(t)
-			emptyClient := clients.Clients{}
 
 			if tc.respError == "" || tc.mockError != nil {
 				urlSaveMock.On("SaveURL", tc.url, mock.AnythingOfType("string")).
 					Return(tc.mockError).Once()
 			}
 
-			handler := New(emptylog.NewEmptyLogger(), emptyClient, urlSaveMock)
+			handler := New(emptylog.NewEmptyLogger(), urlSaveMock)
 
 			input := fmt.Sprintf(`{"url": "%s", "alias": "%s"}`, tc.url, tc.alias)
 

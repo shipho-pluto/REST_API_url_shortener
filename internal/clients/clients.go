@@ -3,11 +3,17 @@ package clients
 import ssogrpc "url-shortener/internal/clients/sso/grpc"
 
 type Clients struct {
-	sso *ssogrpc.Client
+	*ssogrpc.Client
+	appID int32
 }
 
-func New(sso *ssogrpc.Client) Clients {
+func New(sso *ssogrpc.Client, appID int32) Clients {
 	return Clients{
-		sso: sso,
+		Client: sso,
+		appID:  appID,
 	}
+}
+
+func (c Clients) AppID() int32 {
+	return c.appID
 }

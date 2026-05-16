@@ -9,7 +9,12 @@ require (
 	github.com/shipho-pluto/grpc_proto v0.0.1
 )
 
-require github.com/pkg/errors v0.9.1 // indirect
+require (
+	github.com/onsi/ginkgo v1.16.4 // indirect
+	github.com/onsi/gomega v1.15.0 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	go.opentelemetry.io/otel v1.37.0 // indirect
+)
 
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2 // indirect
@@ -53,10 +58,9 @@ require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/brianvoe/gofakeit/v6 v6.28.0
 	github.com/gavv/httpexpect/v2 v2.17.0
-	github.com/go-chi/chi v1.5.5
 	github.com/go-chi/chi/v5 v5.2.5
 	github.com/go-chi/render v1.0.3
-	github.com/golang-migrate/migrate/v4 v4.19.1
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/pressly/goose v2.7.0+incompatible
 	github.com/stretchr/testify v1.11.1

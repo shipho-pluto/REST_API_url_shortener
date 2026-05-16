@@ -14,7 +14,6 @@ type Config struct {
 	DataStore DataStore     `yaml:"datastore"`
 	Server    Server        `yaml:"http_server" env:"HTTP_SERVER"`
 	Clients   ClientsConfig `yaml:"clients"`
-	AppSecret string        `yaml:"app_secret" env:"APP_SECRET"`
 }
 
 type DataStore struct {
@@ -41,8 +40,6 @@ type Storage struct {
 }
 
 type Server struct {
-	User        string        `yaml:"user" env-required:"true"`
-	Password    string        `yaml:"password" env:"PASSWORD" env-required:"true"`
 	Address     string        `yaml:"address" env:"Address"`
 	Timeout     time.Duration `yaml:"timeout" env-default:"5s"`
 	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
@@ -52,6 +49,7 @@ type Client struct {
 	Address      string        `yaml:"address"`
 	Timeout      time.Duration `yaml:"timeout"`
 	RetriesCount int           `yaml:"retries_count"`
+	AppID        int32         `yaml:"app_id"`
 }
 
 type ClientsConfig struct {
